@@ -1,0 +1,26 @@
+1. La diferencia entre el puntero crudo y los inteligentes es que los inteligentes permiten evitar fugas de memoria y gestionan automáticamente la vida del recurso. La diferencia entre el unique y le shared es la posibilidad de tener varios propietarios, la cual sí tiene shared pero no tiene unique. Se podría utilizar para eventos relacionados con la interfaz o con variables del juego que se deban mostrar en esta
+
+2. Intentaría usar un profiler para detectar si el problema está en el render o en la lógica, y después reducir llamadas o cálculos innecesarios.
+
+3. En la herencia, una clase hereda de otra sus métodos atributos y la posibilidad de alterar los métodos virtuales. La composición indica relación entre clases, donde una puede tener otro, pero sin dependencias. Utilizaría herencia entre algunos elementos de la UI que tengan comportamientos similares, mientras que los propios paneles tendrían composición sobre estos
+
+4. Para evitar dead-locks o problemas similares entre hilos, utilizaría estrategias existentes como semáforos o mutex. Para los casos de motores de videojuegos, utilizaría una cola de mensajes o sistema de eventos, protegiendo los valores que puedan causar un deadlock tras mutex o atomic
+
+5. Utilizaría una clase EventHolder para disponer de todos los eventos de forma fácilmente accesible y haga una cola de estos. Los eventos de la UI se suscribirían a estos eventos y el manager despacha los eventos a los listeners. Ayudaría un patrón de diseño Observer o un Publisher-Subscriber
+
+
+
+
+1. 
+Encapsulamiento: protección de las variables private/protected de las clases, normalmente con el uso de métodos getters y setters para acceder a atributos de la clase de forma segura, como los valores que se puedan introducir en la UI por el usuario
+Herencia: Cuando una clase hereda atributos y métodos de otra. A su vez, esta clase que hereda, puede hacer override a métodos virtuales. En c++ se permite heredar de varias clases. Esto permite hace clases para comportamientos similares entre elementos de UI y que se herede de esto, aunque la composición es una alternativa a esto más recomendada.
+Polimorfismo: Se aprovecha de la naturaleza de la herencia para poder utilizar objetos de forma genérica, concretamente con funciones virtuales o interfaces abstractas. Por ejemplo, si tenemos las clases Perro y Gato que heredan de Animal, se pueden usar como Animal aunque puedan sobreescribir su comportamiento. En la UI se puede aprovechar para métodos genéricos entre elementos de UI que compartan una misma clase
+
+2. Una variable por valor realizará una copia de este y sus modificaciones no afectarán a la variable inicial. Por referencia permite modificar sus valores al pasar el puntero original. La referencia constante permite pasar el valor no modificable pero sin realizar uan copia, siendo esta la opción más eficiente.
+
+3. Para un acceso rápido por nombre o id, se puede utilizar un mapa como std::unoredered_map. También se puede iterar sobre estos con un std::vector<Button*>
+
+4. RAII garantiza que un recurso se libera automáticamente cuando un objeto sale de alcance, evitando fugas de memoria o recursos gráficos. Es fundamental en C++ moderno para texturas, fuentes o handles de UI
+
+5. El game loop, o bucle jugable, es el bucle que se entiende como la base del juego, lo que el jugador realizará a lo largo del juego con posibles modificaciones. La UI debe estar integrado en este para cada parte del bucle
+	-GPT: El game loop es el bucle principal que actualiza el estado del juego y renderiza cada frame. La UI se actualiza y renderiza dentro de este bucle, asegurando que las entradas del jugador se reflejen de forma consistente y eficiente.
