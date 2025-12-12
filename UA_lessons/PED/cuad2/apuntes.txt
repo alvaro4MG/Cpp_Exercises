@@ -1,0 +1,56 @@
+APUNTES
+
+está ordenado por volumen (y no hay dos volumenes repetidos)
+el arbol binario tiene un contenido, un hijo izquierda y otro derecha
+
+empezamos por nodo
+TNodoABB::TNodoABB(): item(), iz(), de(){
+    //Ya están todos los constructores, no hace falta hacer más
+}
+
+TNodoABB::TNodoABB(const TNodoABB &orig)    :       //los : son el inicializador de objetos (cuando layering)
+    item(orig.item), iz(orig.iz), de(orig.de){
+}
+
+TNodoABB::~TNodoABB(){
+    //Vacio porque hay una composición que invocan a sus destructores y no hay más variables que tengamos que borrar
+}
+
+
+
+
+ARBOL BINARIO DE BUSQUEDA
+como arbol binario pero cambia inserción y borrado      (lo de binario está en apuntes, se pueden copiar todos menos inserción y borrar)
+
+construimos con puntero a NULL y ya está
+TABBPoro::TABBPoro(){
+    nodo=NULL;
+}
+CONSTRUCTOR DE COPIA
+TABBPoro::TABBPoro(const TABBPoro &orig){
+    if(orig.nodo!=NULL){
+        TNodoABB *aux=new TNodoABB();           //Se hace un puntero y tiene todo a NULL
+        aux->item=orig.nodo->item;
+        nodo=aux;                               //Nuestro nuevo nodo es aux
+        nodo->iz.Copiar(orig.nodo->iz);         //Se harán llamadas recursivas
+        nodo->de.Copiar(orig.nodo->de);
+    }
+}
+
+TABBPoro::~TABBPoro(){
+    if(nodo!=NULL){
+        delete nodo;                        //Llama a todos los destructores del nodo, tanto del item como de los dos hijos
+        nodo=NULL;
+    }
+}
+
+
+para que compile, hay que hacer una declaracion forward
+
+
+
+
+
+/////////////SESION 2
+
+Empezar por insertar, que recorre hasta un arol vacio e inserta

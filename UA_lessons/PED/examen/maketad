@@ -1,0 +1,31 @@
+.PHONY= doc clean
+
+CC=g++
+OPTIONS= -g 
+DEBUG= #-D DEBUG
+LIBDIR=lib
+INCLUDEDIR=include
+_OBJ= tporo.o tvectorporo.o tavlporo.o 
+OBJ = $(patsubst %,$(LIBDIR)/%,$(_OBJ))
+
+
+tad10: $(OBJS)
+	$(CC) $(OPTIONS) $(DEBUG) -I$(INCLUDEDIR) tavlPoro_prueba/tad10.cpp $(OBJ) -o tad10
+	
+
+$(LIBDIR)/%.o : $(LIBDIR)/%.cpp $(INCLUDEDIR)/%.h
+	$(CC) $(OPTIONS) $(DEBUG) -c -I$(INCLUDEDIR) -o $@ $<
+
+misalida: tad10
+	./tad10 >misalida
+
+compare: misalida tavlPoro_prueba/tad10.cpp.sal
+	diff -b misalida tavlPoro_prueba/tad10.cpp.sal
+
+all: misalida compare
+
+doc:
+	doxygen
+
+clean:
+	rm -f $(OBJ) misalida tad10

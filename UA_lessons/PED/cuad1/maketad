@@ -1,0 +1,31 @@
+.PHONY= doc clean
+
+CC=g++
+OPTIONS= -g 
+DEBUG= #-D DEBUG
+LIBDIR=lib
+INCLUDEDIR=include
+_OBJ= tporo.o tvectorporo.o tlistaporo.o 
+OBJ = $(patsubst %,$(LIBDIR)/%,$(_OBJ))
+
+
+tad11: $(OBJS)
+	$(CC) $(OPTIONS) $(DEBUG) -I$(INCLUDEDIR) tads_correccion/tads_vector/tad11.cpp $(OBJ) -o tad11
+	
+
+$(LIBDIR)/%.o : $(LIBDIR)/%.cpp $(INCLUDEDIR)/%.h
+	$(CC) $(OPTIONS) $(DEBUG) -c -I$(INCLUDEDIR) -o $@ $<
+
+salida: tad11
+	./tad11 >misalida
+
+compare: misalida tads_correccion/tads_vector/tad11.cpp.sal
+	diff -b misalida tads_correccion/tads_vector/tad11.cpp.sal
+
+all: salida compare
+
+doc:
+	doxygen
+
+clean:
+	rm -f $(OBJ) 

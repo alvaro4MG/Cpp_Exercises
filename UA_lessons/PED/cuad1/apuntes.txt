@@ -1,0 +1,160 @@
+Cuadernillo 1
+si se hace TCoordenada arrayP2[10], sera un array estático siempre presente en el main, con 10 coordenadas creadas con el constructor por defecto
+TCoordenada *ptrp3 = &objetoP1: ptrp3 es un puntero, apunta al objeto objetoP1 (dirección)
+    accedemos a un valor con "ptrP3 -> x" o  con "(*ptrp3).x", cualquiera de las 2 sirve 
+TCoordenada $refP4 = objetoP1 para referencia
+
+
+Los TPoro son poros en el marmol, tiene sus coordenadas, el volumen (el tamaño a rellenar) y el color (char * color, dinámico, creado en tiempo de ejecución con el new y borrado con el delete)
+    Se rellenaba con una pistola
+    el color letra a letra de forma dinámica
+
+si no se pone nada de visibilidad, es privada
+mejor intentar funciones inline, mejor para el compilador también
+
+usamos make como:
+    (tenemos un archivo makefile o "make -f <nombre de mi makefile>" con el formato de las diapos)
+    también puede haber etiquetas y variables, como OPC=-g para debugger/depurador o lo que sea para debuggear y no poner mensajitos
+
+CONSTRUCTOR del poro (en el .cpp ponemos el #include<string.h>)
+TPoro::TPoro(){             //Constructor por defecto
+    x=y=0;
+    volumen=0;
+    color=null;     //el new se vendrá cuando tengamos cosas
+}
+
+TPoro::TPoro(int a, int b, double vol, char* orig){             //Constructor con argumentos
+    x=a;
+    y=b;
+    volumen=vol;
+    ---color=orig;     //esto estaría mal porque color y orig apuntan al mismo sitio y son independientes, hay que hacer copia profunda para tener memoria nueva para el color
+    color=new char[strlen(orig)+1];     //la memoria se reserva, ahora toca copiarlo. Puede ser null, hay que comprobar eso (si lo es, se pone a null)
+    strcpy(color,orig);                 //aquí se copia
+}
+
+CONSTRUCTOR DE COPIA: se llama de forma explícita o al pasar su valor como parámetro a una función (se pasa una copia para no modificarlo, aunque sea más lento pero es más seguro) o cuando se devuelve por valor (para evitar problemas devolviendo variables locales)
+    PD: al crearlo como TPoro b(a); no puede estar creado el b antes como TPoro a,b;
+TPoro::TPoro(const TPoro &orig){            //necesario pasarlo como referencia o entra en un bucle de llamar al constructor de copia
+    x=orig.x;
+    y=orig.y;
+    volumen=orig.volumen;
+    if(orig.color==null){
+        color=new char[strlen(orig.color)+1];
+        strcpy(color,orig.color);
+    }else{
+        color=null;
+    }
+}
+
+DESTRUCTOR: para liberar la memoria, no hace falta llamarlo, cuando acaba el main se equivoca a todos los destructores
+TPoro::~TPoro(){
+    x=y=0;
+    volumen=0;
+    if(color != null){
+        delete color;           //liberamos la memoria, esto es lo que nos importa liberar, el resto se queda a 0 y el objeto sigue existiendo, pero ocupa menos
+        color=null;
+    }
+    
+}
+
+
+
+//SESION 2
+lo amigo accede a la parte privada (aunque no queremos esto), porque no tenemos más remedio
+    cout << tporo; //sobrecarga de operadores
+    las clases pueden ser amigas (por ejemplo, que línea pueda acceder a lo privado de coordenada, entonces TCorrdenada declara friend class TLine; se otorga la amistad, no se toma)
+    hay que poner #ifndef al principio (para evitar que se pase dos veces por el mismo archivo, "redefinition"); #ifndef_NombreClase_H_ #define_NombreClase_H_ ... #endif
+    
+al hacer TCoordenada *ptrcoor = new TCoordenada(7,3) se crea memoria para la coordenada, por si nos quedamos sin memoria, el pointer es null
+    la memoria se libera como: delete de un puntero y asignarlo a null [Java se encarga solo de la memoria, pero con C++ tenemos que hacerlo nosotros)
+    y eliminar un vector de objetos?
+        delete [] puntero;      //en color será delete color sin [], porque "color=new char[20]", char ya está predefinida y el compilador puede borrarlo
+    TPoro *b = new TPoro[5]; TPoro x; b[1]=x; //sobrecarga del operador asignación (solo se puede hacer entre tipos básicos como enteros) donde a un TPoro se le asigna otro TPoro, tenemos que definirlo
+        delete [] b;            //se pone el corchete porque la clase TPoro es mía, si fuera básica no haría falta (el compilador se apañaría), los corchetes siempre vacíos
+        
+"this" es una variable polimórfica, un puntero al objeto que lo invoca. (*this) es todo el objeto, como "this->"
+"const" se usa para variables que no queremos que se pueda cambiar
+    por ejemplo, si queremos asignar un TPoro:
+        TPoro
+        TPoro::operator=(const TPoro &origen){...}        //variable por referencia para no crear nueva variable, con const no se puede cambiar
+            un objeto constante solo podría llamar a sus funciones y métodos constantes, sino da un error de compilación
+        TPoro                           TPoro
+        TPoro::operator+()              TPoro::operator<<(TPoro&){...}      si hacemos "cout<<a+b;" da error porque espera referencia y recibe valor, si le ponemos const al <<, const y referencia podrá dar el valor (además de que así no da error de compilación, es más eficiente porque usamos referencia sin crear nueva variable y no se puede cambiar ni da error
+SOBRECARGA DE OPERADORES (de los existentes, para ponerselo fácil al usuario)
+TCoordenada a, b, c;   a = b + c;   //sobrecarga de 2 operadores: "a.operator=(b.operator+(c));" sería lo mismo
+se modifica el operando de la izquierda? (para saber qué esquema usar)
+        TPoro a,b,c;
+        //operando de la izquierda es de mi clase? (a+3): a.operator+(3)=> función miembro      (3+a): 3.operator+(a)=> el de la izquierda es el que manda
+    NO (a-b): 
+    SI (a=b): almacena el resultado en el propio objeto, se devuelve el propio objeto y por referencia (por su rapidez)
+        TPoro&                                  //se devuelve por referencia
+        TPoro::operator=(const TPoro &op2){
+            (*this).~TPoro();                   //hacemos referencia al propio objeto y lo borramos previamente con el constructor/liberador
+            x= op2.x;                          //asignamos los valores
+            ...
+            if(op2.color!=null){...}else{color=null}
+            return *this;}                      //devolvemos el objeto, devuelve una caja entera (si fuera solo this, sería un puntero), por rapidez, si devolvieramos valor, se invocaría al constructor de copia, esto solo se hace cuando se devuelve una variable local (que se destruye al terminar el scope)
+            ++al principio añadimos un if(this != &op2){...}  para que no se borre si hacemos a=a;
+
+prueba git
+
+
+
+//SESION 3 (seguimos con operadores)
+tendremos que hacer también los operadores de igualdad > <= para la lista
+    colocarlo en parte publica (porque nos interesa que el usuario lo pueda utilizar desde el main)
+    usar <= para que se asigne a la derecha con menor o igual volumen
+seguimos con el operator=, primero miramos que la referencia no sea la misma, luego lo liberamos 
+    es distinto TPoro b(a) y c=a es que en la primera (constructor de copia) no está creado, en la segunda se tiene que destruir lo ya creado
+        se puede hacer un método copia para ambos (el segundo hará todo lo de la destrucción antes), hecho de forma privada
+para operator+-, se crea una variable local y se devuelve su valor (no se puede referencia porque al terminar el método se elimina)
+para operator==, miramos que los colores no sean NULL
+    en el main comparamos los objetos
+para el ostream, lo hacemos amigo para acceder a la parte privada (entonces es inutil usar los getters, porque entonces no hemos hecho nada haciendolo amigo)
+
+cambiamos el archivo todo1.cpp a main.cpp  
+    $make
+    $main >misalida
+    $diff -b misalida todo1.cpp.sal
+
+SOBRECARGA DEL corchete (hay que hacerlo porque no es un tipo básico, es un tipo creado por nosotros)
+TVectorPoro tiene 1 dimension, un puntero datos con los poros creados (desde 0 hasta dimension-1)
+    tambien hay un TPoro error que se encarga de los errores de la sobrecarga de corchete
+los corchetes tiene parte derecha y parte izquierda (según donde aparezca el corchete)
+        a[1]=x; está en la izquierda  =/= cout<<a[4]; está en la derecha
+            entonces parte izquierda es asignar
+    izquierda: TPoro&                   //nos interesa referencia porque nos interesa esa zona de memoria en concreto                                                                  
+                TVectorPoro::operator[](int pos){                                               
+                    //se puede decidir el orden de los indices, para el usuario es mejor 1-10 que 0-9
+                    if( pos>0 && pos<=dimension)
+                        return datos[pos-1];
+                    else
+                        return error;       //devolvemos el TPoro error para que el programa no me aborte, el TPoro que le estemos asignando se guarda en ese error igual
+                }                               cuando hagamos cout<<a[400]; sacará el TPoro error que tengamos guardado
+    derecha: TPoro                                                     
+                TVectorPoro::operator[](int pos) const {            //ponemos el const porque en la parte derecha no se modifica                                               
+                    //mismo código
+                    if( pos>0 && pos<=dimension)
+                        return datos[pos-1];                        //devuelve por valor, por lo que se llama al cosntructor de copia
+                    else
+                        return error;       //en el constructor de copia del tporo hay que poner el const de parámetro
+                }
+
+
+
+********SESION 6*******
+depurador GDB, compilamos "gcc -g"
+
+"gdb ./(nombre del ejecutable)"
+y nos aparecen distintas opciones
+    l para ver las lineas
+    b para un breakpoint (punto de parada): b (numero)
+    r para run hasta breakpoint
+        si hay error antes de que llegue al breakpoint, podemos poner el breakpoint antes y buscar el error
+        n (next) ejecuta el método
+        s (step) ejecuta paso a paso
+        "p (nombre de variable)" (print) para mostrar el valor de la variable
+        "display (nombre)" en cada linea muestra lo que vale esa variable
+    salimos con q
+
+"valgrind (nombre del ejecutable)"
