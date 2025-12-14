@@ -1,0 +1,18 @@
+Just to clarify one thing, because many of you are already facing the problem
+
+
+What happens when I have a parameter which name is exactly the same as one of my attributes?
+
+For instance, in the case of the constructor of Task
+
+that receives a parameter "name"
+
+and has an argument "name"
+
+you should use the pointer "this"
+(I will cover it in the next session)
+
+"this" is a pointer to the object that did the call to the method
+so "this->name" refers to the attribute of the object
+
+use "this->name=name" to indicate that you assign the parameter "name" to the attribute "name" (represented by "this->name"
