@@ -1,0 +1,53 @@
+se escribe en la consola "make all" y se ejecuta y registran los datos
+
+se puede representar de forma logarítmica (pero para esta práctica no)
+    y=x^a  --> a*logx - logy
+
+
+diferencias bubble y quick
+    cambiar títulos y eso
+    bubblesort no tiene caso mejor y peor, y para vectores del mismo tamaño, se comporta igual
+    quicksort le damos posición inicial y final, valores que se pueden hacer negativos, tiene casos mejor (vector ya ordenado o al contrario) y peor
+        para cada valor de n hay que generar distintos vectores y en el tiempo mostrar el promedio, unas 30 muestras de n 
+
+
+redirecciones las salidas a un fichero
+quickshort > quicksort.CPUtimes     (sustituye)
+quickshort >> quicksort.CPUtimes    (añade)
+
+
+makefile compara los archivos por fechas para compilarlos si son nuevos
+    cada "línea" es una regla, compara fecha y hora de los que hay a la derecha de "nombre : .." respecto a la izquierda
+    puedes elegir la línea a ejecutar como "make graphs" (si no se hace, solo ejecuta la primera), o todas con "make all"
+    hay que cambiar el DNI (hecho) y los bubble por quick (hecho)
+
+tar: c de crear
+        v de verboso te dice lo que hace
+        f
+        z para comprimir (si no, solo agrupa pero no comprime)
+    tar cvfz 48150407E.tgz quickSort.cc makefile QuickSort .gnuplot
+    descomprimir: tar xvfz 48150407E.tgz
+
+
+
+
+SESION 2 (gnuplot)
+es una herramienta para el desarrollo de gráficos
+escribimos en terminal "gnuplot" (trabajamos desde la consola)
+    escribimos las instruccines en un fichero de texto y ya
+    pinta la gráfica en una ventana emergente, así que le decimos que lo guarde como imagen
+
+segunda gráfica tiene 2 curvas: CPU (la de antes) y a función que mejor se asemeja a los datos
+    ajuste por mínimos cuadrados tras una función propuesta, fit la ajusta a ello
+    si a plot le ponemos comas, podemos poner todas las cosas a representar que queramos (linea 45)
+    (si quitamos # de 25-27 y las ponemos a 37-39)
+        podemos no ponerle un término independiente b, pero es mejor ponerlo
+            para nlog(n) + 3: necesitamos a,b,c 
+    hacemos prueba y error (algo chapucero) para ver cada una de las formas
+    si hacemos "make graphs", podemos ver la suma de los cuadrados de lso residuos (diferencia entre la recta real y la aproximación) en la consola
+    tenemos que buscar que se superpongan
+    (podemos cambiar los limites, en vez de mirar solo los datos: "set xrange [0:2000])
+    la mejor forma de ver el grado es representarlo en escala logarítmica (porque quita el exponente)
+        y=x^m --> logy = m *logx -->y =mx+b (podemos ver el grado)
+    probamos cada función comentando y descomentando y viendo la suma de diferencias de cuadrados
+        descomentamos la función que veamos que se ajusta mejor

@@ -1,0 +1,21 @@
+#Álvaro Martínez García, 48150407E
+OPTS = -Wall -g -O3 -std=c++0x
+
+pruebas: pruebas.cc
+	g++ ${OPTS} -o pruebas pruebas.cc
+
+met0: pruebas met.Greedy_test_files/01n-01m.p
+	./pruebas -f met.Greedy_test_files/01n-01m.p 
+
+met1: pruebas met.Greedy_test_files/07n-01m.p
+	./pruebas -f met.Greedy_test_files/07n-01m.p
+
+misalida: pruebas pruebas.PD_test_files/01n-01m.p
+	./pruebas -f pruebas.PD_test_files/01n-01m.p >misalida
+
+compare: misalida pruebas.PD_test_files/01n-01m.p.sol
+	diff -b misalida pruebas.PD_test_files/01n-01m.p.sol
+
+clean: 
+	rm met *~
+ 

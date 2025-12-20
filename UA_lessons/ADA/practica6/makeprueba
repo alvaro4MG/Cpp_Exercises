@@ -1,0 +1,24 @@
+#Álvaro Martínez García, 48150407E
+OPTS = -Wall -g -O3 -std=c++0x
+
+pruebas: pruebas.cc
+	g++ ${OPTS} -o pruebas pruebas.cc
+
+met0: pruebas met.PD_test_files/0.problem
+	./pruebas -f met.PD_test_files/0.problem 
+
+met1: pruebas met.PD_test_files/1.problem
+	./pruebas -f met.PD_test_files/1.problem
+
+tar: pruebas.cc makefile
+	tar cvfz 48150407E.tar.gz pruebas.cc makefile
+
+misalida: pruebas met.PD_test_files/0.problem
+	./met -f met.PD_test_files/0.problem >misalida
+
+compare: misalida met.PD_test_files/0.problem.sol
+	diff -b misalida met.PD_test_files/0.problem.sol
+
+clean: 
+	rm met *~
+ 

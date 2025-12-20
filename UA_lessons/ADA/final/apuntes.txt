@@ -1,0 +1,4 @@
+probar varias estrategias, una de ellas es la de backtracking (no hacer nada)
+ser escueto con la práctica
+máx de 5 minutos
+LO MÁS IMPORTANTE ES LA LISTA DE NODOS VIVOS, NECESARIO PARA ESTA PRÁCTICA

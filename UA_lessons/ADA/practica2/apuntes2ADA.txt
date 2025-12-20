@@ -1,0 +1,54 @@
+PRACTICA 2: Comparativa de Heapsort y Quicksort
+Contando pasos (mejor que el tiempo), aunque no es apropiado para contar algoritmos (porque puede beneficiar a una y fastidiar a otra, si faltan pasos por contar)
+Comparativa de 3 casos distintos
+    con vectores aleatorios (ambos tienen mejor y peor y hay que hacer repeticiones)
+        le pasamos el mismo vector a ambos algoritmos (hay que hacer una copia para no pasarselo al segundo ordenado)
+        tamaño size_t para que decida el compilador (igual como variable global)
+    cuando reciben un vector ordenado (basta con hacer solo una repeticion, le pasamos el ordenado antes)
+    cuando reciben un vector ordenado del revés (le pasamos el anterior habiendole hecho swap con la mitad del vector)
+5 gráficas
+    es importante que gnuplot entienda la tabla, basta que los valores estén  separados por un espacio
+    ajustamos a n*logn + n (la mejor de la anterior)
+    para la gráfcia 3 utilizar coeficientes distintos a/b y c/d
+
+Cómo medir los pasos:
+    quicksort hace dos montones (dos mitades), menores de la mitad a un montón y mayores de la mitad a otro montón
+        de esos montones se hacen otros dos montones y luego se recoge todo
+        para empezar, lo mejor es el quicksort central, que usa de pivote el de en medio
+        el pivote solo hace una particion, la llamada recursiva es lo que los ordena
+            do{
+                while (v[i]<pivot) i++;         
+                while (v[j]>pivot) j--;
+                if (i<=j)
+                {
+                    aux=v[i]; v[i]=v[j]; v[j]=aux;          //los swapeamos porque ambos están mal respecto al pivote
+                    i++; j--;
+                }
+            } while (i<=j);
+            if (left<j)  middle_QuickSort(v,left,j);
+            if (i<right) middle_QuickSort(v,i,right);
+        solo tiene que mirar cada elemento una vez => el coste es n
+        para contar los pasos:
+            do{
+                while (v[i]<pivot){ i++; contI++; }                     //cada vez que se hace i++ y j-- ó sumar n en cada llamada     
+                while (v[j]>pivot) j--;
+                if (i<=j)
+                {
+                    aux=v[i]; v[i]=v[j]; v[j]=aux;
+                    i++; j--;
+                }
+            } while (i<=j);
+            if (left<j)  middle_QuickSort(v,left,j);
+            if (i<right) middle_QuickSort(v,i,right);
+
+    Heapsort construye un heap (una estructura de datos), va poniendo los números mayores al final
+        ordenamos como un arbol binario poniendo los niveles por orden (siempre lo más a la izquierda posible) y cada elemento tiene que ser mayor que sus dos hijos, eso es un heap
+            left(i)=2i+1        right(i)=2i+2
+            todo nodo tiene que ser mayor que sus dos hijos: primero recorremos los nodos que tienen hijos (de derecha a izquierda)
+                la mitad de los nodos son hojas y la otroa mitad tienen hijos, así que miramos el primer nodo con hijos, que es n/2-1
+                cambiamos el hijo y el nodo si el nodo era menor y se intercambia así en el vector
+                    v=[7,0,4, 3 ,2,1,5, 6 ] --> v=[7,0,4, 6 ,2,1,5, 3]          //hemos cambiado el 3 (que era el nodo) por el 6 (que era el hijo y era mayor)
+        tenemos el mejor primer elemento en cada heap, entonces heapsort lo coge y lo intercambia por el final
+            hacemos recursividad con todos los elementos menos el último (que era el primero del heap) y entonces el hijo más pequeño será el nuevo primero y se volverá a ordenar todo
+        la complejidad depende de las veces que hace el bucle (lo de dentro del do-while es constante, como un paso), por lo que depende de las veces que haga esa constante
+        

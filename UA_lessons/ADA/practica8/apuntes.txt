@@ -1,0 +1,51 @@
+bus de datos bidireccional (cada uno caracterizado por un valor)
+son n ordenadores que tienen que transmitir archivos con m puertas de enlace
+reducir tráfico estimado
+    valor del nodo multiplicado por la distancia al destino
+
+(en los ejemplos los nodos empiezan en 0)
+primero obtener la recurrencia
+obtener 4 algortimos vistos e clase y otro:
+    naive, memoizacion, iterativo e iterativo con cosa espacial mejorada
+
+
+
+f >> n >> m;        se lee lo que tenga esto y con memoria reservada y empieza el for 
+for(i=0; i< n ;i++){
+    f >> c[i];                  el operador f se ocupa de los saltos de linea y todo eso
+}
+
+gestion de argumentos:
+    main(int argc, char* argv[])
+        for(int i=1;i< argc; i++){
+            comprobar cada argumento argv[i]
+        }
+    utilizar booleanas para las opciones
+    se pueden repetir (solo se hace una vez)
+    fichero no tendrá errores
+
+
+
+
+mismo valor de trafico estimado para todas las soluciones (aunque sean distintas)
+
+mensajes mejor en inglés, de error y eso
+    salida estándar
+    poner un mensajito de ayuda para ver lo que falla
+        basta con informar del primero
+    el programa acaba con exit
+
+
+    si algo falta (algún algoritmo), poner una interrogación
+        hace falta minimo naive y memoizacion
+
+
+en la matriz no se muestra fila y columna 0
+
+
+
+
+
+
+///////////Práctica 8
+(folio)
