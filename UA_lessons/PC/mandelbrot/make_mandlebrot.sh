@@ -1,0 +1,2 @@
+g++ mandelbrot.cpp -std=c++2a -Wall -Wextra -pthread -lsfml-window -lsfml-system -lsfml-graphics -ggdb -ltbb -fconstexpr-ops-limit=1000000000 -fconstexpr-loop-limit=100000000
+
