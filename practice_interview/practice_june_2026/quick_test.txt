@@ -1,0 +1,95 @@
+1)
+#include <iostream>
+
+int main() {
+    int x = 5;
+    int* p = &x;
+
+    *p = 10;
+
+    std::cout << x << std::endl;
+}
+
+2)
+#include <iostream>
+
+void foo(int x) {
+    x = 20;
+}
+
+int main() {
+    int a = 10;
+    foo(a);
+
+    std::cout << a << std::endl;
+}
+
+3)
+#include <iostream>
+
+void foo(int& x) {
+    x = 20;
+}
+
+int main() {
+    int a = 10;
+    foo(a);
+
+    std::cout << a << std::endl;
+}
+
+4)
+int* p = nullptr;
+std::cout << *p;
+
+5)
+#include <iostream>
+
+int main() {
+    int arr[] = {1, 2, 3};
+
+    std::cout << *(arr + 1) << std::endl;
+}
+
+6)
+Difference between int* p; and int& r = x;
+
+7)
+std::vector<int> v;
+
+for(int i = 0; i < n; i++)
+{
+    v.push_back(i);
+}
+
+8)
+what structure to use for time complexity O(1) to check existance of an element?
+vector, list, unordered_map, queue
+
+9)
+std::vector<int> v = {1,2,3};
+
+for(auto x : v)
+{
+    x *= 2;
+}
+
+for(auto x : v)
+{
+    std::cout << x << " ";
+}
+
+10)
+how to fix previous code to really modify vector?
+
+
+1) 10
+2) 10
+3) 20
+4) The pointers (*) can be nullptr, not like references (&). In this case the pointer is pointing nowhere, so it will produce a undefined behaviour since we are dereferencing a null pointer
+5) 2
+6) the first is a pointer that is not initialized, the second is a reference to the variable x
+7) Time complexity of O(n)
+8) unordered_map
+9) the for(auto x : v) is making a copy so we are not modifying the actual vector
+10) make the for loop as for(auto& x : v) to change directly the value of the vector

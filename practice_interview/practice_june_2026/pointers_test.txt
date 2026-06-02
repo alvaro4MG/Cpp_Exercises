@@ -1,0 +1,63 @@
+1)
+what does RAII stand for in c++?
+
+2)
+#include <iostream>
+
+class File {
+public:
+    File() { std::cout << "Open\n"; }
+    ~File() { std::cout << "Close\n"; }
+};
+
+void func() {
+    File f;
+    std::cout << "Working\n";
+}
+
+int main() {
+    func();
+    std::cout << "End\n";
+}
+
+3)
+void foo() {
+    int* p = new int(10);
+    p = new int(20);
+    delete p;
+}
+
+4)
+int* p = new int(5);
+int* q = p;
+
+delete p;
+
+std::cout << *q;
+
+5)
+Difference between std::unique_ptr and std::shared_ptr
+
+6)
+#include <memory>
+
+std::unique_ptr<int> p1 = std::make_unique<int>(10);
+std::unique_ptr<int> p2 = p1;
+
+7)
+std::unique_ptr<int> p1 = std::make_unique<int>(10);
+std::unique_ptr<int> p2 = std::move(p1);
+
+
+
+1) RAII (Resource Acquisition Is Initialization) consists in handling memory during the lifetime of the object. Resources are acquired and released in constructor/destructor to ensure automatic cleanup
+2)
+Open
+Working
+End
+Close
+3) you are allocating 2 different places in the memory but only freeing 1, the int(20), so the int(10) is the memory leak
+4) q in this case is a dangling pointer. The memory is freed, so dereferencing q results in undefined behaviour
+5) unique_ptr can be accessed by one pointer, while the shared one can be accessed by more
+6) can not be created as it is a unique_ptr, so it will not compile
+7) you are making p2 the pointer for the unique_ptr of 10 and p1 becomes nullptr

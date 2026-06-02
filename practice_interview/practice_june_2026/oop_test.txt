@@ -1,0 +1,49 @@
+15)
+#include <iostream>
+
+class Animal {
+public:
+    void speak() {
+        std::cout << "Animal";
+    }
+};
+
+class Dog : public Animal {
+public:
+    void speak() {
+        std::cout << "Dog";
+    }
+};
+
+int main() {
+    Animal* a = new Dog();
+    a->speak();
+}
+
+16)
+What change to print Dog?
+
+17)
+what is a virtual function?
+
+18)
+why destructor virtual in base class?
+
+
+15) It prints Animal since the method speak() is not virtual and it uses early binding (static dispatch). When using a pointer Animal*, it calls Animal::speak()
+16) make speak() virtual and the speak() of Dog override
+class Animal {
+public:
+    virtual void speak() {
+        std::cout << "Animal";
+    }
+};
+
+class Dog : public Animal {
+public:
+    void speak() override {
+        std::cout << "Dog";
+    }
+};
+17) a virtual function is a function that can have its own implementation and be overriden by methods of classes that inherite the base class thanks to runtime polymorphism, that chooses the implementation based of the actual object type
+18) because each class can have different memory use that need different destructors
