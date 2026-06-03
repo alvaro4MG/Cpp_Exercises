@@ -1,0 +1,192 @@
+1)
+#include <iostream>
+
+int main() {
+    int x = 10;
+    int& r = x;
+
+    r = 20;
+
+    std::cout << x << std::endl;
+}
+
+2)
+#include <iostream>
+
+int main() {
+    int x = 5;
+    int* p = &x;
+    int* q = p;
+
+    *q = 8;
+
+    std::cout << *p << std::endl;
+}
+
+3)
+int x = 10;
+int& r = x;
+
+int y = 20;
+r = y;
+
+4)
+#include <iostream>
+
+class A {
+public:
+    A() {
+        std::cout << "A ";
+    }
+
+    ~A() {
+        std::cout << "~A ";
+    }
+};
+
+int main() {
+    {
+        A a;
+    }
+
+    std::cout << "End";
+}
+
+5)
+#include <iostream>
+
+class Base {
+public:
+    virtual void foo() {
+        std::cout << "Base";
+    }
+};
+
+class Derived : public Base {
+public:
+    void foo() override {
+        std::cout << "Derived";
+    }
+};
+
+int main() {
+    Base* p = new Derived();
+    p->foo();
+    delete p;
+}
+
+6)
+void foo() {
+    int* p = new int(10);
+
+    delete p;
+}
+
+7)
+void foo() {
+    int* p = new int(10);
+
+    if (*p == 10)
+        return;
+
+    delete p;
+}
+
+8)
+for(int i = 0; i < n; i++)
+{
+    for(int j = 0; j < n; j++)
+    {
+    }
+}
+
+9)
+std::vector<int> v = {1,2,3};
+
+for(auto& x : v)
+{
+    x += 1;
+}
+
+for(auto x : v)
+{
+    std::cout << x << " ";
+}
+
+10)
+std::string s = "EA";
+
+std::string t = s;
+
+t[0] = 'B';
+
+std::cout << s << " " << t;
+
+11)
+std::unique_ptr<int> p =
+    std::make_unique<int>(42);
+
+int* raw = p.get();
+
+12)
+std::unique_ptr<int> p1 =
+    std::make_unique<int>(10);
+
+std::unique_ptr<int> p2 =
+    std::move(p1);
+
+13)
+#include <iostream>
+
+class Test {
+public:
+    Test() {
+        std::cout << "Ctor ";
+    }
+
+    ~Test() {
+        std::cout << "Dtor ";
+    }
+};
+
+int main() {
+    std::unique_ptr<Test> p =
+        std::make_unique<Test>();
+
+    std::cout << "Run ";
+}
+
+14)
+which one to search an elemnt many times? (vector, unordered_set, list)
+
+15)
+class Base {
+public:
+    ~Base() {}
+};
+
+class Derived : public Base {
+public:
+    ~Derived() {}
+};
+
+Base* p = new Derived();
+
+delete p;
+
+
+1) 20 (r is a reference to x)
+2) 8 (q is pointing to the same direction as p)
+3) x=20 r=20 (reference cannot be reassigned, so x=y and r is reference to y)
+4) A ~A End (because of the scope)
+5) Derived (foo() si virtual)
+6) no memory leak
+7) memory leak
+8) O(n^2)
+9) 2 3 4
+10) EA BA (string is copied)
+11) can make it (get() returns the raw pointer but does not change owner)
+12) Property of the pointer is now in p2 because of the move, which will return the 10. p1 is now a nullptr (undefined behaviour)
+13) Ctor Run Dtor
+14) unordered_set for O(1) time access
+15) Base class should have virtual destructor
