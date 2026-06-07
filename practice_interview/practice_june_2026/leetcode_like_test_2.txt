@@ -1,0 +1,102 @@
+11) 
+Given a vector std::vector<int> nums; return true if a number is repeated. Make it in O(n) time
+
+12)
+Reverse a string without std::reverse
+
+13)
+return the index of the 2 numbers that add up to the target
+
+14)
+check if the string of parenthesis is valid
+
+
+
+
+
+
+11)
+    #include <unordered_set>
+    #include <vector>
+    bool checkRepeated(const std::vector<int>& nums) {
+        std::unordered_set<int> set;
+
+        for(const auto& v : nums){
+            if(set.contains(v)){
+                return true;
+            }else{
+                set.insert(v);
+            }
+        }
+        return false;
+    }
+
+12)
+    #include <string>
+    void newReverse(string& message){
+        int i = 0;
+        int j = message.size() - 1;
+        char aux;	// or use std::swap(message[i], message[j]);
+
+        while(i < j){
+            aux = message[i];
+            message[i] = message[j];
+            message[j] = aux;
+            i++;
+            j--;
+        }
+    }
+
+13)
+    void twoSum(const vector<int>& nums, const int& target, int& id1, int& id2){
+        id1 = 0;
+        id2 = nums.size() - 1;
+        int sum = nums[id1] + nums[id2];
+
+        while(sum != target){
+            if(sum < target){
+                id1++;
+            }else{
+                id2--;
+            }
+
+            sum = nums[id1] + nums[id2];
+        }
+    }
+
+14)
+    #include <stack>
+    #include <string>
+    bool validParenthesis(const string& message){
+        std::stack<char> pila;
+
+        for(auto& c : message){
+            if(c == '(' || c== '[' || c == '{'){
+                pila.push(c);
+            }else{
+		if(pila.empty()){
+		    return false;
+		}
+
+                switch(c){
+                    case ')':
+                        if(pila.top() != '('){
+                            return false;
+                        }
+                        break;
+                    case ']':
+                        if(pila.top() != '['){
+                            return false;
+                        }
+                        break;
+                    case '}':
+                        if(pila.top() != '{'){
+                            return false;
+                        }
+                        break;
+                }
+                pila.pop();
+            }
+        }
+        return pila.empty();
+    }
